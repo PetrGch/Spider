@@ -1,0 +1,7 @@
+CREATE USER 'spider'@'localhost' IDENTIFIED BY '1111';
+
+GRANT ALL PRIVILEGES ON * . * TO 'spider'@'localhost';
+
+CREATE DATABASE IF NOT EXISTS `spider` DEFAULT CHARACTER SET cp1251;
+DROP DATABASE IF EXISTS `spider`;
+USE `spider`

@@ -1,6 +1,8 @@
 package org.scripingdemo.booking;
 
 import com.mashape.unirest.http.exceptions.UnirestException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,10 +12,12 @@ import org.springframework.stereotype.Component;
 @EnableScheduling
 public class BookingScheduler {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(DocumentGetter.class);
+
   @Autowired
   DocumentGetter docGetter;
 
-  @Scheduled(fixedRate = 1000000)
+  @Scheduled(fixedRate = 100000)
   public void reportCurrentTime() throws UnirestException, InterruptedException {
     UrlModel tempUrl = new UrlModel();
     tempUrl.setCheckinMonthday(19);
@@ -26,6 +30,8 @@ public class BookingScheduler {
     tempUrl.setGroupChildren(0);
     tempUrl.setNoRooms(1);
     tempUrl.setFromSf(1);
+
+    LOGGER.info("Scheduling iteration");
 
     docGetter.startScripingProcess(tempUrl);
   }

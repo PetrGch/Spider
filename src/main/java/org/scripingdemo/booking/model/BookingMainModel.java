@@ -9,7 +9,8 @@ import java.util.UUID;
 @Component
 public class BookingMainModel {
 
-  private String id;
+  private int id;
+  private String uniqueItemId;
   private String name;
   private String date;
   private String type;
@@ -18,17 +19,42 @@ public class BookingMainModel {
   private String coordinates;
 
   public BookingMainModel() {
-    this.id = UUID.randomUUID().toString();
+    this.uniqueItemId = UUID.randomUUID().toString();
+    this.date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
   }
 
   public BookingMainModel(String name, String type, double discontPrice, double realPrice, String coordinates) {
-    this.id = UUID.randomUUID().toString();
+    this.uniqueItemId = UUID.randomUUID().toString();
     this.name = name;
     this.date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     this.type = type;
     this.discontPrice = discontPrice;
     this.realPrice = realPrice;
     this.coordinates = coordinates;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getUniqueItemId() {
+    return uniqueItemId;
+  }
+
+  public void setUniqueItemId(String uniqueItemId) {
+    this.uniqueItemId = uniqueItemId;
+  }
+
+  public String getDate() {
+    return date;
+  }
+
+  public void setDate(String date) {
+    this.date = date;
   }
 
   public String getName() {
@@ -75,6 +101,7 @@ public class BookingMainModel {
   public String toString() {
     return "MainBookingModel: ("
         + "id: " + id
+        + ", uniqueItemId: " + uniqueItemId
         + ", name: " + name
         + ", type: " + type
         + ", date: " + date

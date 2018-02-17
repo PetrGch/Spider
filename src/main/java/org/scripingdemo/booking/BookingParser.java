@@ -45,7 +45,7 @@ public class BookingParser {
       double reslPrice = convertStringToDouble(e.select(REAL_PRICE).text());
       String coordinates = e.select(COORDINATES).attr("data-coords");
       BookingMainModel m = instance(name, type, discountPrice, reslPrice, coordinates);
-
+      System.out.println(m);
       items.add(m);
     }
 

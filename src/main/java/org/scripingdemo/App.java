@@ -3,11 +3,10 @@ package org.scripingdemo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
+import java.util.UUID;
 
 @SpringBootApplication
-@ComponentScan
 public class App implements CommandLineRunner {
 
     public static void main( String[] args ) {
@@ -16,6 +15,6 @@ public class App implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        //
+        System.out.println(UUID.randomUUID().toString() );
     }
 }
