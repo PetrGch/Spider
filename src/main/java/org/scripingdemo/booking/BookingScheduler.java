@@ -20,11 +20,11 @@ public class BookingScheduler {
   @Scheduled(fixedRate = 100000)
   public void reportCurrentTime() throws UnirestException, InterruptedException {
     UrlModel tempUrl = new UrlModel();
-    tempUrl.setCheckinMonthday(19);
-    tempUrl.setCheckinMonth(2);
+    tempUrl.setCheckinMonthday(2);
+    tempUrl.setCheckinMonth(3);
     tempUrl.setCheckinYear(2018);
-    tempUrl.setCheckoutMonthday(25);
-    tempUrl.setCheckoutMonth(2);
+    tempUrl.setCheckoutMonthday(6);
+    tempUrl.setCheckoutMonth(3);
     tempUrl.setCheckoutYear(2018);
     tempUrl.setGroupAdults(2);
     tempUrl.setGroupChildren(0);

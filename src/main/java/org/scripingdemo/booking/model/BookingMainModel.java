@@ -19,8 +19,8 @@ public class BookingMainModel {
   private String coordinates;
 
   public BookingMainModel() {
-    this.uniqueItemId = UUID.randomUUID().toString();
-    this.date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+//    this.uniqueItemId = UUID.randomUUID().toString();
+//    this.date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
   }
 
   public BookingMainModel(String name, String type, double discontPrice, double realPrice, String coordinates) {
