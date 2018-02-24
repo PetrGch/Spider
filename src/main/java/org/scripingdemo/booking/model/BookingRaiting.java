@@ -1,27 +1,51 @@
 package org.scripingdemo.booking.model;
 
-import org.springframework.stereotype.Component;
-
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  * Created by petr on 20.02.18.
  */
-@Component
+
+@Entity
+@Table(name = "booking_rating")
 public class BookingRaiting {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
   private int id;
+
+  @Column(name = "raiting")
   private double rating;
+
+  @Column(name = "location_score")
   private int locationScore;
+
+  @Column(name = "cleanness_score")
   private int cleannessScore;
+
+  @Column(name = "price_quality")
   private int priceQuality;
+
+  @Column(name = "comfort_score")
   private int comfortScore;
+
+  @Column(name = "staff_score")
   private int staffScore;
+
+  @Column(name = "comments")
   private int comments;
+
+  @Column(name = "reputation")
   private String reputation;
+
+  @Column(name = "date")
   private String date;
 
+  @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST})
+  @JoinColumn(name = "hotel_id")
   private BookingHotel bookingHotel;
 
   public BookingRaiting() {
@@ -37,7 +61,7 @@ public class BookingRaiting {
     this.staffScore = staffScore;
     this.comments = comments;
     this.reputation = reputation;
-    this.date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+    this.date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
   }
 
   public int getId() {

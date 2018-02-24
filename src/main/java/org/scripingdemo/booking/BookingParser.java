@@ -5,6 +5,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.scripingdemo.booking.model.BookingHotel;
 import org.scripingdemo.booking.model.BookingRaiting;
+import org.scripingdemo.booking.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -36,36 +37,21 @@ public class BookingParser {
   private static final String REPUTATION = "span.review-score-widget__text";
 
   @Autowired
-  List<BookingHotel> items;
-
-  @Bean
-  private BookingHotel bookingHotelInstance() {
-    return new BookingHotel();
-  }
-
-  @Bean
-  private BookingHotel bookingHotelInstance(String name, String type, String coordinates, double distanceFromCenter, int amountOfPeoples, int space) {
-    return new BookingHotel(name, type, coordinates, distanceFromCenter, amountOfPeoples, space);
-  }
-
-  @Bean
-  private BookingRaiting bookingRaitingInstance() {
-    return new BookingRaiting();
-  }
-
-  @Bean
-  private BookingRaiting bookingRaitingInstance(double rating, int locationScore, int cleannessScore, int priceQuality, int comfortScore, int staffScore, int comments, String reputation) {
-    return new BookingRaiting(rating, locationScore, cleannessScore, priceQuality, comfortScore, staffScore, comments, reputation);
-  }
+  private BookingService bookingService;
 
   public List<BookingHotel> getMainInfo(Document document) {
-    items = new ArrayList<>();
+    List<BookingHotel> items = new ArrayList<>();
 
     for (Element e : document.select(ITEM)) {
       BookingHotel bookingHotel = this.getBuildBookingHotel(e);
       BookingRaiting bookingRaiting = this.getBuildBookingRaiting(e);
 
-      bookingHotel.add(bookingRaiting);
+//      bookingHotel.add(bookingRaiting);
+      System.out.println(bookingHotel);
+
+      BookingHotel bookingHotel_2 = new BookingHotel("фывфывафывафыва", "", "41.6454054413864,41.6402908220785", 0.75, 2, 32);
+//      bookingService.saveBookingHotel(bookingHotel_2);
+      bookingService.saveBookingHotel(bookingHotel);
 
       items.add(bookingHotel);
     }
@@ -81,8 +67,7 @@ public class BookingParser {
     int amountOfPeoples = this.amountOfPeopleConverter(e.select(AMOUNT_OF_PEOPLE));
     int space = this.spaceConverter(e.select(SPACE).text());
 
-    return bookingHotelInstance(name, type, coordinates, distanceFromCenter, amountOfPeoples, space);
-
+    return new BookingHotel(name, type, coordinates, 0.75, amountOfPeoples, space);
   }
 
   private double priceConverter(String price) {
@@ -151,7 +136,7 @@ public class BookingParser {
     }
     String reputation = e.select(REPUTATION).text();
 
-    return bookingRaitingInstance(rating, locationScore, cleannessScore, priceQuality, comfortScore, staffScore, coments, reputation);
+    return new BookingRaiting(rating, locationScore, cleannessScore, priceQuality, comfortScore, staffScore, coments, reputation);
   }
 
   private List<Integer> parseScore(String scores) {

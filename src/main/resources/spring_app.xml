@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+			 xmlns:mvc="http://www.springframework.org/schema/mvc"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xmlns:context="http://www.springframework.org/schema/context"
+			 xmlns:aop="http://www.springframework.org/schema/aop"
+			 xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<context:component-scan base-package="org.scripingdemo" />
+
+	<!--<aop:aspectj-autoproxy/>-->
+
+	<!-- Define Spring MVC view resolver -->
+
+	<bean name="jackson2ObjectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+		<property name="indentOutput" value="true"/>
+	</bean>
+
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<property name="objectMapper" ref="jackson2ObjectMapper" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+				destroy-method="close">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/spider?UseUnicode=true&amp;characterEncoding=utf8" />
+		<property name="username" value="root" />
+		<property name="password" value="((Gtnh))123123" />
+	</bean>
+
+	<bean id="hibernate4AnnotatedSessionFactory"
+				class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>org.scripingdemo.booking.model.BookingHotel</value>
+				<value>org.scripingdemo.booking.model.BookingRaiting</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+				<!--<prop key="hibernate.enable_lazy_load_no_trans">true</prop>-->
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.connection.CharSet">utf8</prop>
+				<prop key="hibernate.connection.characterEncoding">utf8</prop>
+				<prop key="hibernate.connection.useUnicode">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="bookingDAO" class="org.scripingdemo.booking.dao.BookingDAOImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+
+	<!--<mvc:resources mapping="/resources/**" location="/resources/static/"/>-->
+
+</beans>

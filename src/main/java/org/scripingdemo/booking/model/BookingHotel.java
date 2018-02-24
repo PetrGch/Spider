@@ -1,7 +1,8 @@
 package org.scripingdemo.booking.model;
 
-import org.springframework.stereotype.Component;
+import org.hibernate.Hibernate;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -10,18 +11,39 @@ import java.util.UUID;
  * Created by petr on 18.02.18.
  */
 
-@Component
+@Entity
+@Table(name = "booking_hotel")
 public class BookingHotel {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
   private int id;
+
+  @Column(name = "unique_item_id")
   private String uniqueItemId;
+
+  @Column(name = "name")
   private String name;
+
+  @Column(name = "type")
   private String type;
+
+  @Column(name = "coordinates")
   private String coordinates;
+
+  @Column(name = "distance_from_center")
   private double distanceFromCenter;
+
+  @Column(name = "amount_of_people")
   private int amountOfPeoples;
+
+  @Column(name = "space")
   private int space;
 
+  @OneToMany(fetch = FetchType.LAZY,
+      mappedBy = "bookingHotel",
+      cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST})
   private List<BookingRaiting> bookingRaitings;
 
   public void add(BookingRaiting tempBookingRaitings) {
@@ -130,7 +152,7 @@ public class BookingHotel {
         ", distanceFromCenter='" + distanceFromCenter + '\'' +
         ", amountOfPeoples='" + amountOfPeoples + '\'' +
         ", space=" + space +
-        ", bookingRaitings=" + bookingRaitings +
+//        ", bookingRaitings=" + bookingRaitings +
         '}';
   }
 }

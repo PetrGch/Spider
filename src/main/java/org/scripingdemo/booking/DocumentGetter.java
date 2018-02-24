@@ -4,19 +4,26 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.http.HttpHost;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+//import org.scripingdemo.booking.model.BookingHotel;
+import org.scripingdemo.booking.model.BookingHotel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @Component
 @PropertySource(
-    value={"classpath*:../resources/foo.properties"},
+    value = {"classpath*:../resources/foo.properties"},
     ignoreResourceNotFound = true)
 public class DocumentGetter {
 
@@ -36,9 +43,11 @@ public class DocumentGetter {
   private static final String PAGINATION_LI_CLASS = "li.sr_pagination_item";
 
   public void startScripingProcess(UrlModel bookingUrlModel) throws UnirestException, InterruptedException {
-    for (int i = 0; i <= 1; i++) {
+    List<BookingHotel> items = new ArrayList<>();
+
+    for (int i = 0; i <= 0; i++) {
       Document document = this.makeRequest(bookingUrlModel, i * 15);
-      bookingParser.getMainInfo(document);
+      items.addAll(bookingParser.getMainInfo(document));
 
       Random r = new Random();
       TimeUnit.SECONDS.sleep(r.nextInt(10));

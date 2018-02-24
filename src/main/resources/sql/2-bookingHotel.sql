@@ -21,13 +21,13 @@ CREATE TABLE `booking_hotel` (
 )
   ENGINE = InnoDB
   AUTO_INCREMENT = 0
-  DEFAULT CHARSET = cp1251;
+  DEFAULT CHARSET = utf8;
 
 INSERT INTO `booking_hotel` VALUES
-  (1, 'e890a831-d1c6-4e77-a370-d743c47e06a0', 'Batumi Wonderland Guest House', '', '41.6454054413864,41.6402908220785',
+  (1, 'e890a831-d1c6-4e77-a370-d743c47e06a0', 'ывафыва', '', '41.6454054413864,41.6402908220785',
    '0.75', '2', 0);
 
-SELECT name FROM booking_hotel;
+SELECT * FROM booking_hotel;
 
 # HOTELS RATING
 
@@ -43,7 +43,7 @@ CREATE TABLE `booking_rating` (
   `staff_score`     INT(4)           DEFAULT NULL,
   `comments`        INT(4)           DEFAULT NULL,
   `reputation`      VARCHAR(40)      DEFAULT NULL,
-  `data`            DATE             DEFAULT NULL,
+  `date`            DATE             DEFAULT NULL,
   `hotel_id`        INT(11)          DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_HOTEL_idx` (`hotel_id`),
@@ -54,7 +54,7 @@ CREATE TABLE `booking_rating` (
 )
   ENGINE = InnoDB
   AUTO_INCREMENT = 0
-  DEFAULT CHARSET = cp1251;
+  DEFAULT CHARSET = utf8;
 
 INSERT INTO `booking_rating` VALUES
   (1, 9.9, 10, 10, 10, 10, 95, 5, 'Великолепно Месторасположение', '2018-02-21', 1);
