@@ -5,6 +5,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.scripingdemo.booking.model.BookingDetail;
 import org.scripingdemo.booking.model.BookingHotel;
 import org.scripingdemo.booking.model.BookingRaiting;
 import org.scripingdemo.booking.service.BookingService;
@@ -26,17 +27,6 @@ public class BookingScheduler {
   @Autowired
   DocumentGetter docGetter;
 
-//  private SessionFactory sessionFactory;
-//
-//  public void setSessionFactory(SessionFactory sessionFactory) {
-//    this.sessionFactory = sessionFactory;
-//  }
-
-
-
-  @Autowired
-  private BookingService bookingService;
-
   @Scheduled(fixedRate = 10000)
   public void reportCurrentTime() throws UnirestException, InterruptedException {
     UrlModel tempUrl = new UrlModel();
@@ -52,37 +42,6 @@ public class BookingScheduler {
     tempUrl.setFromSf(1);
 
     LOGGER.info("Scheduling iteration");
-
-//    BookingHotel bookingHotel = bookingService.searchHotelByCoordinateAndName("Batumi", "41.609604,41.635793");
-//
-//    BookingRaiting bookingRaiting = new BookingRaiting(9.9, 10, 10, 10, 10, 95, 5, "Великолепно Месторасположение");
-//
-//    if (bookingHotel != null) {
-
-//      bookingHotel.add(bookingRaiting);
-//
-//      bookingService.saveBookingRaiting(bookingRaiting);
-//      System.out.println(bookingHotel);
-//    } else {
-//      System.out.println("Nothing have been found");
-//    }
-
-
-
-
-////    if (this.sessionFactory != null) {
-////      Session session = this.sessionFactory.openSession();
-////      Transaction tx = session.beginTransaction();
-//      BookingHotel bookingHotel = new BookingHotel("Batumi Wonderland Guest House", "", "41.6454054413864,41.6402908220785", 0.75, 2, 32);
-//      BookingRaiting bookingRaiting = new BookingRaiting(9.9, 10, 10, 10, 10, 95, 5, "Великолепно Месторасположение");
-//      bookingHotel.add(bookingRaiting);
-//
-//      System.out.println(bookingHotel);
-//      bookingService.saveBookingHotel(bookingHotel);
-////      session.saveOrUpdate(bookingHotel);
-////      tx.commit();
-////      session.close();
-////    }
 
     docGetter.startScripingProcess(tempUrl);
   }

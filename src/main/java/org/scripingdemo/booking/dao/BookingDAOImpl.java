@@ -34,7 +34,7 @@ public class BookingDAOImpl implements BookingDAO {
   }
 
   @Override
-  public void saveBookingRaiting(BookingRaiting bookingRaiting) {
+  public void saveBookingDetail(BookingRaiting bookingRaiting) {
     Session session = this.sessionFactory.openSession();
     Transaction tx = session.beginTransaction();
     session.saveOrUpdate(bookingRaiting);
@@ -50,7 +50,7 @@ public class BookingDAOImpl implements BookingDAO {
 
     Query query = null;
     if (coordinate != null && coordinate.trim().length() > 0) {
-      query = session.createQuery("FROM BookingHotel b JOIN FETCH b.bookingRaitings WHERE lower(b.coordinates) LIKE :coordinates AND lower(b.name) LIKE :hotelName ");
+      query = session.createQuery("FROM BookingHotel b JOIN FETCH b.bookingDetail WHERE lower(b.coordinates) LIKE :coordinates AND lower(b.name) LIKE :hotelName ");
       query.setParameter("coordinates", "%" + coordinate.toLowerCase() + "%")
           .setParameter("hotelName", "%" + hotelName.toLowerCase() + "%");
     }

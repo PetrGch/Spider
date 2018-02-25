@@ -11,7 +11,7 @@ import java.util.List;
 public interface BookingService {
 
   public void saveBookingHotel(BookingHotel bookingHotel);
-  public void saveBookingRaiting(BookingRaiting bookingRaiting);
+  public void saveBookingDetail(BookingRaiting bookingRaiting);
   public BookingHotel searchHotelByCoordinateAndName(String hotelName, String coordinate);
 
 }

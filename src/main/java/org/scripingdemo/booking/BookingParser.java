@@ -3,7 +3,9 @@ package org.scripingdemo.booking;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.scripingdemo.booking.model.BookingDetail;
 import org.scripingdemo.booking.model.BookingHotel;
+import org.scripingdemo.booking.model.BookingPrice;
 import org.scripingdemo.booking.model.BookingRaiting;
 import org.scripingdemo.booking.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +31,18 @@ public class BookingParser {
   private static final String AMOUNT_OF_PEOPLE = "div.sr_max_occupancy";
   private static final String SPACE = "span.sr-rt-size";
 
-  // For hotel raiting
+  // For hotel details
 
   private static final String RATING = "span.sr_main_score_badge span.review-score-badge";
   private static final String SCORE = "div.sr-review-score";
   private static final String COMENTS = "span.review-score-widget__subtext";
   private static final String REPUTATION = "span.review-score-widget__text";
+
+  // For hotel price
+
+  private static final String ACTUAL_PRICE = "span.toggle_price_per_night_or_stay";
+  private static final String DISCONT_PRICE = "strong.price > b";
+  private static final String FREE_ROOMS = "span.only_x_left";
 
   @Autowired
   private BookingService bookingService;
@@ -44,19 +52,18 @@ public class BookingParser {
 
     for (Element e : document.select(ITEM)) {
       BookingHotel bookingHotel = this.getBuildBookingHotel(e);
-      BookingRaiting bookingRaiting = this.getBuildBookingRaiting(e);
+      BookingDetail bookingDetail = this.getBuildBookingDetail(e);
+      BookingPrice bookingPrice = this.getBuildBookingPrice(e);
 
       System.out.println(bookingHotel);
       BookingHotel foundHotel = bookingService.searchHotelByCoordinateAndName(bookingHotel.getName(), bookingHotel.getCoordinates());
       if (foundHotel != null) {
-        foundHotel.add(bookingRaiting);
-        bookingService.saveBookingRaiting(bookingRaiting);
+        foundHotel.setBookingDetail(bookingDetail);
+        bookingService.saveBookingHotel(foundHotel);
       } else {
+        bookingHotel.setBookingDetail(bookingDetail);
         bookingService.saveBookingHotel(bookingHotel);
-        bookingHotel.add(bookingRaiting);
-        bookingService.saveBookingRaiting(bookingRaiting);
       }
-
 
       items.add(bookingHotel);
     }
@@ -73,13 +80,6 @@ public class BookingParser {
     int space = this.spaceConverter(e.select(SPACE).text());
 
     return new BookingHotel(name, type, coordinates, distanceFromCenter, amountOfPeoples, space);
-  }
-
-  private double priceConverter(String price) {
-    Pattern p = Pattern.compile("[0-9]{3,4}(\\.[0-9]{1,2})?");
-    Matcher m = p.matcher(price);
-
-    return m.find() ? Double.parseDouble(m.group()) : 0.0;
   }
 
   private double distanceConverter(String distance) {
@@ -123,7 +123,7 @@ public class BookingParser {
     return 0;
   }
 
-  private BookingRaiting getBuildBookingRaiting(Element e) {
+  private BookingDetail getBuildBookingDetail(Element e) {
     double rating = !e.select(RATING).text().isEmpty() ? Double.parseDouble(e.select(RATING).text().replace(",", ".")) : 0.0;
     List<Integer> score = this.parseScore(e.select(SCORE).attr("data-ratings"));
     int locationScore = 0;
@@ -141,7 +141,7 @@ public class BookingParser {
     }
     String reputation = e.select(REPUTATION).text();
 
-    return new BookingRaiting(rating, locationScore, cleannessScore, priceQuality, comfortScore, staffScore, coments, reputation);
+    return new BookingDetail(rating, locationScore, cleannessScore, priceQuality, comfortScore, staffScore, coments, reputation);
   }
 
   private List<Integer> parseScore(String scores) {
@@ -171,6 +171,34 @@ public class BookingParser {
     }
 
     return 0;
+  }
+
+  private BookingPrice getBuildBookingPrice(Element e) {
+    double actualPrice = this.priceConverter(e.select(ACTUAL_PRICE).text());
+    double discontPrice = this.priceConverter(e.select(DISCONT_PRICE).text());
+    boolean isAvailable = false;
+    int freeRooms = 0;
+
+    if (discontPrice != 0.0) {
+      isAvailable = true;
+      freeRooms = this.freeRoomsConverter(e.select(FREE_ROOMS).text());
+    }
+
+    return new BookingPrice(isAvailable, actualPrice, discontPrice, freeRooms);
+  }
+
+  private double priceConverter(String price) {
+    Pattern p = Pattern.compile("[0-9]{3,4}(\\.[0-9]{1,2})?");
+    Matcher m = p.matcher(price);
+
+    return m.find() ? Double.parseDouble(m.group()) : 0.0;
+  }
+
+  private int freeRoomsConverter(String freeRooms) {
+    Pattern p = Pattern.compile("\\d+");
+    Matcher m = p.matcher(freeRooms);
+
+    return m.find() ? Integer.parseInt(m.group()) : 0;
   }
 
 }
