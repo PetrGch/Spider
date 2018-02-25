@@ -53,19 +53,19 @@ public class BookingScheduler {
 
     LOGGER.info("Scheduling iteration");
 
-    BookingHotel bookingHotel = bookingService.searchHotelByCoordinateAndName("апартаменти Магнолия", "41.611624,41.638976");
+//    BookingHotel bookingHotel = bookingService.searchHotelByCoordinateAndName("Batumi", "41.609604,41.635793");
+//
+//    BookingRaiting bookingRaiting = new BookingRaiting(9.9, 10, 10, 10, 10, 95, 5, "Великолепно Месторасположение");
+//
+//    if (bookingHotel != null) {
 
-    BookingRaiting bookingRaiting = new BookingRaiting(9.9, 10, 10, 10, 10, 95, 5, "Великолепно Месторасположение");
-
-    if (bookingHotel != null) {
-
-      bookingHotel.add(bookingRaiting);
-
-      bookingService.saveBookingRaiting(bookingRaiting);
-      System.out.println(bookingHotel);
-    } else {
-      System.out.println("Nothing have been found");
-    }
+//      bookingHotel.add(bookingRaiting);
+//
+//      bookingService.saveBookingRaiting(bookingRaiting);
+//      System.out.println(bookingHotel);
+//    } else {
+//      System.out.println("Nothing have been found");
+//    }
 
 
 
@@ -84,7 +84,7 @@ public class BookingScheduler {
 ////      session.close();
 ////    }
 
-//    docGetter.startScripingProcess(tempUrl);
+    docGetter.startScripingProcess(tempUrl);
   }
 
 }

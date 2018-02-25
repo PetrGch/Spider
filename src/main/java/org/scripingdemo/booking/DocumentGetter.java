@@ -50,7 +50,7 @@ public class DocumentGetter {
       items.addAll(bookingParser.getMainInfo(document));
 
       Random r = new Random();
-      TimeUnit.SECONDS.sleep(r.nextInt(10));
+      TimeUnit.SECONDS.sleep(r.nextInt(20));
     }
   }
 

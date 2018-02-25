@@ -46,12 +46,17 @@ public class BookingParser {
       BookingHotel bookingHotel = this.getBuildBookingHotel(e);
       BookingRaiting bookingRaiting = this.getBuildBookingRaiting(e);
 
-//      bookingHotel.add(bookingRaiting);
       System.out.println(bookingHotel);
+      BookingHotel foundHotel = bookingService.searchHotelByCoordinateAndName(bookingHotel.getName(), bookingHotel.getCoordinates());
+      if (foundHotel != null) {
+        foundHotel.add(bookingRaiting);
+        bookingService.saveBookingRaiting(bookingRaiting);
+      } else {
+        bookingService.saveBookingHotel(bookingHotel);
+        bookingHotel.add(bookingRaiting);
+        bookingService.saveBookingRaiting(bookingRaiting);
+      }
 
-      BookingHotel bookingHotel_2 = new BookingHotel("фывфывафывафыва", "", "41.6454054413864,41.6402908220785", 0.75, 2, 32);
-//      bookingService.saveBookingHotel(bookingHotel_2);
-      bookingService.saveBookingHotel(bookingHotel);
 
       items.add(bookingHotel);
     }
@@ -67,7 +72,7 @@ public class BookingParser {
     int amountOfPeoples = this.amountOfPeopleConverter(e.select(AMOUNT_OF_PEOPLE));
     int space = this.spaceConverter(e.select(SPACE).text());
 
-    return new BookingHotel(name, type, coordinates, 0.75, amountOfPeoples, space);
+    return new BookingHotel(name, type, coordinates, distanceFromCenter, amountOfPeoples, space);
   }
 
   private double priceConverter(String price) {

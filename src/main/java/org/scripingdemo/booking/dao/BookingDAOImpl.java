@@ -46,6 +46,7 @@ public class BookingDAOImpl implements BookingDAO {
   public BookingHotel searchHotelByCoordinateAndName(String hotelName, String coordinate) {
     Session session = this.sessionFactory.openSession();
     BookingHotel bookingHotel = null;
+    List<BookingHotel> tempResult = new ArrayList<>();
 
     Query query = null;
     if (coordinate != null && coordinate.trim().length() > 0) {
@@ -56,10 +57,13 @@ public class BookingDAOImpl implements BookingDAO {
 
     try {
       if (query != null) {
-        bookingHotel = (BookingHotel) query.uniqueResult();
+        tempResult = query.list();
+        if (!tempResult.isEmpty()) {
+          bookingHotel = tempResult.get(0);
+        }
       }
     } catch (Exception ex) {
-      throw new IllegalArgumentException("Exception in method searchHotelByCoordinate", ex);
+      throw new IllegalArgumentException(ex);
     }
 
     session.close();
