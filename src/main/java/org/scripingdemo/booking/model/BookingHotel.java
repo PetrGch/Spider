@@ -45,19 +45,19 @@ public class BookingHotel {
   @JoinColumn(name = "booking_detail_id")
   private BookingDetail bookingDetail;
 
-//  @OneToMany(fetch = FetchType.LAZY,
-//      mappedBy = "bookingHotel",
-//      cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST})
-//  private List<BookingRaiting> bookingRaitings;
+  @OneToMany(fetch = FetchType.LAZY,
+      mappedBy = "bookingHotel",
+      cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST})
+  private List<BookingPrice> bookingPrices;
 
-//  public void add(BookingRaiting tempBookingRaitings) {
-//    if (bookingRaitings == null) {
-//      bookingRaitings = new ArrayList<>();
-//    }
-//
-//    bookingRaitings.add(tempBookingRaitings);
-//    tempBookingRaitings.setBookingHotel(this);
-//  }
+  public void add(BookingPrice tempBookingPrice) {
+    if (bookingPrices == null) {
+      bookingPrices = new ArrayList<>();
+    }
+
+    bookingPrices.add(tempBookingPrice);
+    tempBookingPrice.setBookingHotel(this);
+  }
 
   public BookingHotel() {
     // Empty constructor
@@ -137,14 +137,13 @@ public class BookingHotel {
     this.space = space;
   }
 
-//  public List<BookingRaiting> getBookingRaitings() {
-//    return bookingRaitings;
-//  }
-//
-//  public void setBookingRaitings(List<BookingRaiting> bookingRaitings) {
-//    this.bookingRaitings = bookingRaitings;
-//  }
+  public List<BookingPrice> getBookingPrices() {
+    return bookingPrices;
+  }
 
+  public void setBookingPrices(List<BookingPrice> bookingPrices) {
+    this.bookingPrices = bookingPrices;
+  }
 
   public BookingDetail getBookingDetail() {
     return bookingDetail;
@@ -165,7 +164,7 @@ public class BookingHotel {
         ", distanceFromCenter='" + distanceFromCenter + '\'' +
         ", amountOfPeoples='" + amountOfPeoples + '\'' +
         ", space=" + space +
-//        ", bookingRaitings=" + bookingRaitings +
+        ", bookingPrices=" + bookingPrices +
         '}';
   }
 }

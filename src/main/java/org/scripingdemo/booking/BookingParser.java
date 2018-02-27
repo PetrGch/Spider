@@ -47,15 +47,11 @@ public class BookingParser {
   @Autowired
   private BookingService bookingService;
 
-  public List<BookingHotel> getMainInfo(Document document) {
-    List<BookingHotel> items = new ArrayList<>();
-
+  public void scripeMainInfo(Document document) {
     for (Element e : document.select(ITEM)) {
       BookingHotel bookingHotel = this.getBuildBookingHotel(e);
       BookingDetail bookingDetail = this.getBuildBookingDetail(e);
-      BookingPrice bookingPrice = this.getBuildBookingPrice(e);
 
-      System.out.println(bookingHotel);
       BookingHotel foundHotel = bookingService.searchHotelByCoordinateAndName(bookingHotel.getName(), bookingHotel.getCoordinates());
       if (foundHotel != null) {
         foundHotel.setBookingDetail(bookingDetail);
@@ -64,11 +60,20 @@ public class BookingParser {
         bookingHotel.setBookingDetail(bookingDetail);
         bookingService.saveBookingHotel(bookingHotel);
       }
-
-      items.add(bookingHotel);
     }
+  }
 
-    return items;
+  public void scripePriceInfo(Document document) {
+    for (Element e : document.select(ITEM)) {
+      BookingHotel bookingHotel = this.getBuildBookingHotel(e);
+      BookingPrice bookingPrice = this.getBuildBookingPrice(e);
+
+      BookingHotel foundHotel = bookingService.searchHotelByCoordinateAndName(bookingHotel.getName(), bookingHotel.getCoordinates());
+      if (foundHotel != null) {
+        foundHotel.add(bookingPrice);
+        bookingService.saveBookingPrice(bookingPrice);
+      }
+    }
   }
 
   private BookingHotel getBuildBookingHotel(Element e) {

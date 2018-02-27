@@ -41,8 +41,8 @@
 		<property name="annotatedClasses">
 			<list>
 				<value>org.scripingdemo.booking.model.BookingHotel</value>
-				<value>org.scripingdemo.booking.model.BookingRaiting</value>
 				<value>org.scripingdemo.booking.model.BookingDetail</value>
+				<value>org.scripingdemo.booking.model.BookingPrice</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

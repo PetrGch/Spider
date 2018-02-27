@@ -42,12 +42,17 @@ public class DocumentGetter {
   private int lastPage = 0;
   private static final String PAGINATION_LI_CLASS = "li.sr_pagination_item";
 
-  public void startScripingProcess(UrlModel bookingUrlModel) throws UnirestException, InterruptedException {
-    List<BookingHotel> items = new ArrayList<>();
-
+  public void startScripingProcess(UrlModel bookingUrlModel, boolean isMainInfo, boolean isPriceInfo) throws UnirestException, InterruptedException {
     for (int i = 0; i <= 0; i++) {
       Document document = this.makeRequest(bookingUrlModel, i * 15);
-      items.addAll(bookingParser.getMainInfo(document));
+
+      if (isMainInfo) {
+        bookingParser.scripeMainInfo(document);
+      }
+
+      if (isPriceInfo) {
+        bookingParser.scripePriceInfo(document);
+      }
 
       Random r = new Random();
       TimeUnit.SECONDS.sleep(r.nextInt(20));

@@ -2,6 +2,7 @@ package org.scripingdemo.booking.service;
 
 import org.scripingdemo.booking.dao.BookingDAO;
 import org.scripingdemo.booking.model.BookingHotel;
+import org.scripingdemo.booking.model.BookingPrice;
 import org.scripingdemo.booking.model.BookingRaiting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,6 +32,11 @@ public class BookingServiceImpl implements BookingService {
   @Transactional
   public void saveBookingDetail(BookingRaiting bookingRaiting) {
     bookingDAO.saveBookingDetail(bookingRaiting);
+  }
+
+  @Override
+  public void saveBookingPrice(BookingPrice bookingPrice) {
+    bookingDAO.saveBookingPrice(bookingPrice);
   }
 
   @Override

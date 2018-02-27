@@ -32,6 +32,10 @@ public class BookingPrice {
   @Column(name = "date")
   private String date;
 
+  @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE, CascadeType.PERSIST})
+  @JoinColumn(name = "hotel_id")
+  private BookingHotel bookingHotel;
+
   public BookingPrice() {}
 
   public BookingPrice(boolean isAvailable, double actualPrice, double discontPrice, int freeRooms) {
@@ -88,6 +92,14 @@ public class BookingPrice {
 
   public void setDate(String date) {
     this.date = date;
+  }
+
+  public BookingHotel getBookingHotel() {
+    return bookingHotel;
+  }
+
+  public void setBookingHotel(BookingHotel bookingHotel) {
+    this.bookingHotel = bookingHotel;
   }
 
   @Override

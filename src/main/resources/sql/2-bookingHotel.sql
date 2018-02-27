@@ -12,18 +12,12 @@ CREATE TABLE `booking_hotel` (
   `amount_of_people`     INT(11)              DEFAULT NULL,
   `space`                INT(11)              DEFAULT NULL,
   `booking_detail_id`    INT(11)              DEFAULT NULL,
-  `some`                 INT(11)              DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_DETAIL_idx` (`booking_detail_id`),
-#   KEY `FK_SOMME_idx` (`some`),
   CONSTRAINT `FK_DETAIL` FOREIGN KEY (`booking_detail_id`)
   REFERENCES `booking_detail` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION
-#   CONSTRAINT `FK_SOME` FOREIGN KEY (`some`)
-#   REFERENCES `some` (`id`)
-#   ON DELETE NO ACTION
-#   ON UPDATE NO ACTION
 )
   ENGINE = InnoDB
   AUTO_INCREMENT = 0
@@ -31,7 +25,7 @@ CREATE TABLE `booking_hotel` (
 
 INSERT INTO `booking_hotel` VALUES
   (0, 'e890a831-d1c6-4e77-a370-d743c47e06a0', 'ывафыва', '', '41.6454054413864,41.6402908220785',
-   '0.75', '2', 0, 1, 1);
+   '0.75', '2', 0, 1);
 
 SELECT * FROM booking_hotel;
 
@@ -41,7 +35,7 @@ DROP TABLE IF EXISTS `booking_detail`;
 
 CREATE TABLE `booking_detail` (
   `id`              INT(11) NOT NULL AUTO_INCREMENT,
-  `raiting`         DOUBLE(3, 2)     DEFAULT NULL,
+  `raiting`         DOUBLE(6, 3)     DEFAULT NULL,
   `location_score`  INT(4)           DEFAULT NULL,
   `cleanness_score` INT(4)           DEFAULT NULL,
   `price_quality`   INT(4)           DEFAULT NULL,
@@ -50,7 +44,6 @@ CREATE TABLE `booking_detail` (
   `comments`        INT(4)           DEFAULT NULL,
   `reputation`      VARCHAR(100)     DEFAULT NULL,
   `date`            DATE             DEFAULT NULL,
-  `hotel_id`        INT(11)          DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -58,44 +51,22 @@ CREATE TABLE `booking_detail` (
   DEFAULT CHARSET = utf8;
 
 INSERT INTO `booking_detail` VALUES
-  (1, 9.9, 10, 10, 10, 10, 95, 5, 'Великолепно Месторасположение', '2018-02-21', 1);
+  (1, 9.9, 10, 10, 10, 10, 95, 5, 'Великолепно Месторасположение', '2018-02-21');
 
 SELECT * FROM booking_detail;
 
-DROP TABLE IF EXISTS `some`;
+# HOTEL PRICE
 
-CREATE TABLE `some` (
-  `id`              INT(11) NOT NULL AUTO_INCREMENT,
-  `someField`         DOUBLE(3, 2)     DEFAULT NULL,
-  PRIMARY KEY (`id`)
-)
-  ENGINE = InnoDB
-  AUTO_INCREMENT = 0
-  DEFAULT CHARSET = utf8;
+DROP TABLE IF EXISTS `booking_price`;
 
-
-INSERT INTO `some` VALUES
-  (1, 9.9);
-
-SELECT * FROM some;
-
-
-# HOTELS RATING
-
-DROP TABLE IF EXISTS `booking_rating`;
-
-CREATE TABLE `booking_rating` (
-  `id`              INT(11) NOT NULL AUTO_INCREMENT,
-  `raiting`         DOUBLE(3, 2)     DEFAULT NULL,
-  `location_score`  INT(4)           DEFAULT NULL,
-  `cleanness_score` INT(4)           DEFAULT NULL,
-  `price_quality`   INT(4)           DEFAULT NULL,
-  `comfort_score`   INT(4)           DEFAULT NULL,
-  `staff_score`     INT(4)           DEFAULT NULL,
-  `comments`        INT(4)           DEFAULT NULL,
-  `reputation`      VARCHAR(100)     DEFAULT NULL,
-  `date`            DATE             DEFAULT NULL,
-  `hotel_id`        INT(11)          DEFAULT NULL,
+CREATE TABLE `booking_price` (
+  `id`            INT(11) NOT NULL AUTO_INCREMENT,
+  `is_available`  BOOLEAN          DEFAULT FALSE,
+  `actual_price`  DOUBLE(7, 2)     DEFAULT 0.0,
+  `discont_price` DOUBLE(7, 2)     DEFAULT 0.0,
+  `free_rooms`    INT(20)          DEFAULT NULL,
+  `date`          DATE,
+  `hotel_id`      INT(11)          DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK_HOTEL_idx` (`hotel_id`),
   CONSTRAINT `FK_HOTEL` FOREIGN KEY (`hotel_id`)
@@ -107,12 +78,18 @@ CREATE TABLE `booking_rating` (
   AUTO_INCREMENT = 0
   DEFAULT CHARSET = utf8;
 
-INSERT INTO `booking_rating` VALUES
-  (1, 9.9, 10, 10, 10, 10, 95, 5, 'Великолепно Месторасположение', '2018-02-21', 1);
 
-SELECT * FROM booking_rating;
+INSERT INTO `booking_price` VALUES
+  (1, TRUE, 45.5, 33.0, 3, '2018-02-22', 1);
 
-SELECT booking_hotel.id, booking_hotel.name, booking_detail.cleanness_score, some.someField
+SELECT * FROM `booking_price`;
+
+
+SELECT
+  booking_hotel.*,
+  booking_detail.*,
+  booking_price.*
 FROM booking_hotel
-  JOIN booking_detail on booking_hotel.id = booking_detail.hotel_id
-  JOIN some on booking_hotel.id = some.id;
+  JOIN booking_detail ON booking_hotel.id = booking_detail.id
+  JOIN booking_price ON booking_hotel.id = booking_price.hotel_id
+  WHERE booking_hotel.name LIKE 'Batumi Orient Lux';

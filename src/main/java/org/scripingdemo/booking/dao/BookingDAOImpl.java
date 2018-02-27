@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.scripingdemo.booking.model.BookingHotel;
+import org.scripingdemo.booking.model.BookingPrice;
 import org.scripingdemo.booking.model.BookingRaiting;
 import org.springframework.stereotype.Repository;
 
@@ -43,6 +44,15 @@ public class BookingDAOImpl implements BookingDAO {
   }
 
   @Override
+  public void saveBookingPrice(BookingPrice bookingPrice) {
+    Session session = this.sessionFactory.openSession();
+    Transaction tx = session.beginTransaction();
+    session.saveOrUpdate(bookingPrice);
+    tx.commit();
+    session.close();
+  }
+
+  @Override
   public BookingHotel searchHotelByCoordinateAndName(String hotelName, String coordinate) {
     Session session = this.sessionFactory.openSession();
     BookingHotel bookingHotel = null;
@@ -50,7 +60,7 @@ public class BookingDAOImpl implements BookingDAO {
 
     Query query = null;
     if (coordinate != null && coordinate.trim().length() > 0) {
-      query = session.createQuery("FROM BookingHotel b JOIN FETCH b.bookingDetail WHERE lower(b.coordinates) LIKE :coordinates AND lower(b.name) LIKE :hotelName ");
+      query = session.createQuery("FROM BookingHotel b JOIN FETCH b.bookingDetail JOIN FETCH b.bookingPrices WHERE lower(b.coordinates) LIKE :coordinates AND lower(b.name) LIKE :hotelName");
       query.setParameter("coordinates", "%" + coordinate.toLowerCase() + "%")
           .setParameter("hotelName", "%" + hotelName.toLowerCase() + "%");
     }
